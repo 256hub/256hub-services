@@ -1,5 +1,5 @@
 queue: 
-  name: Hosted Linux Preview
+  name: Developer
 
 steps:
 - task: dotNetCoreCLI@2
@@ -24,7 +24,8 @@ steps:
 
 - task: dotNetCoreCLI@2
   inputs:
-    command: publish
+    command: publish    
+    projects: "**/*.csproj"
     arguments: --configuration release --output $(Build.ArtifactStagingDirectory)
     zipAfterPublish: true
   displayName: dotnet publish
