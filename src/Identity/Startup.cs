@@ -56,7 +56,7 @@ namespace Hub256.Identity
 
             app.Run(async (context) =>
             {
-                await context.Response.WriteAsync("<html><body><h1>Hello World</h1></body></html>");
+                await context.Response.WriteAsync("<html><body><h1 style=\"color: green;\" >Hello world from azure continiuous integration.</h1></body></html>");
             });
         }
     }
