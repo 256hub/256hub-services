@@ -2,13 +2,13 @@ queue:
   name: Hosted Linux Preview
 
 steps:
-- task: dotNetCoreCLI@1
+- task: dotNetCoreCLI@2
   inputs:
     command: restore
     projects: "**/*.csproj"
   displayName: dotnet restore
 
-- task: dotNetCoreCLI@1
+- task: dotNetCoreCLI@2
   inputs:
     command: build
     projects: "**/*.csproj"
@@ -22,14 +22,14 @@ steps:
 #     arguments: --configuration release
 #   displayName: dotnet build
 
-- task: dotNetCoreCLI@1
+- task: dotNetCoreCLI@2
   inputs:
     command: publish
     arguments: --configuration release --output $(Build.ArtifactStagingDirectory)
     zipAfterPublish: true
   displayName: dotnet publish
 
-- task: publishBuildArtifacts@1
+- task: publishBuildArtifacts@2
   inputs:
     PathtoPublish: $(Build.ArtifactStagingDirectory)
     ArtifactName: drop
