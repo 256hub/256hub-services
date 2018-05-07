@@ -1,0 +1,29 @@
+queue: 
+  name: Developer
+
+trigger:
+  branches:
+    exclude:
+    - master
+    - releases/*
+
+steps:
+- task: dotNetCoreCLI@2
+  inputs:
+    command: restore
+    projects: "**/*.csproj"
+  displayName: dotnet restore
+
+- task: dotNetCoreCLI@2
+  inputs:
+    command: build
+    projects: "**/*.csproj"
+    arguments: --configuration release
+  displayName: dotnet build
+
+- task: dotNetCoreCLI@1
+  inputs:
+    command: test 
+    projects: "tests/**/*.csproj"
+    arguments: --configuration release
+  displayName: dotnet build
