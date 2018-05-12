@@ -8,13 +8,19 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
-namespace Hub256.Identity
+namespace Hub256.Services
 {
     public class Program
     {
         public static void Main(string[] args)
         {
-            BuildWebHost(args).Run();
+             //var b=new WebHostBuilder()
+             //      .UseKestrel()
+             //      .UseContentRoot(Directory.GetCurrentDirectory())
+             //      .UseStartup<Startup>();
+
+            var host = BuildWebHost(args);
+            host.Run();
         }
 
         public static IWebHost BuildWebHost(string[] args) =>
