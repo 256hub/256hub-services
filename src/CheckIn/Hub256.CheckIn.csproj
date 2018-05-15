@@ -1,3 +1,9 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <Import Project="..\Common.props" />
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.0.4" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="View\" />
+  </ItemGroup>
 </Project>
