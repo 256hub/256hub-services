@@ -105,8 +105,6 @@ namespace Hub256.Identity
                 app.UseDeveloperExceptionPage();
             }
 
-           
-
             app.UseIdentityServer();
         }
     }
