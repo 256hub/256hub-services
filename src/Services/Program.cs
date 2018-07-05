@@ -14,10 +14,12 @@ namespace Hub256.Services
     {
         public static void Main(string[] args)
         {
-             //var b=new WebHostBuilder()
-             //      .UseKestrel()
-             //      .UseContentRoot(Directory.GetCurrentDirectory())
-             //      .UseStartup<Startup>();
+            //var b = new WebHostBuilder()
+            //      .UseKestrel()
+            //      .UseContentRoot(Directory.GetCurrentDirectory())
+            //      .UseStartup<Startup>();
+
+         
 
             var host = BuildWebHost(args);
             host.Run();

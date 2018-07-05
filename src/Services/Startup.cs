@@ -18,14 +18,14 @@ namespace Hub256.Services
 
         public Startup(IConfiguration configuration, IHostingEnvironment env)
         {
-            // Configuration = configuration;
-            var builder = new ConfigurationBuilder()
-                //.SetBasePath(env.ContentRootPath)
-                .AddJsonFile("appsettings.json", optional: true)
-                .AddJsonFile($"appsettings.{env.EnvironmentName.ToLowerInvariant()}.json", optional: true)
-                .AddEnvironmentVariables();
+            Configuration = configuration;
+            //var builder = new ConfigurationBuilder()
+            //    //.SetBasePath(env.ContentRootPath)
+            //    .AddJsonFile("appsettings.json", optional: true)
+            //    .AddJsonFile($"appsettings.{env.EnvironmentName.ToLowerInvariant()}.json", optional: true)
+            //    .AddEnvironmentVariables();
 
-            Configuration = builder.Build();
+            //Configuration = builder.Build();
             Environment = env;
         }
 
@@ -39,9 +39,8 @@ namespace Hub256.Services
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
-          
-
             services.AddLogging();
+            services.AddHttpContextAccessor();
 
             var containerBuilder = new ContainerBuilder();
             containerBuilder.Populate(services);
@@ -58,47 +57,10 @@ namespace Hub256.Services
                 app.UseDeveloperExceptionPage();
                 loggerFactory.AddDebug();
                 loggerFactory.AddConsole(Configuration.GetSection("Logging"));
-            }
-
+            }          
+           
             app.MapIsolated<CheckIn.Startup>("/checkin", this);
             app.MapIsolated<Identity.Startup>("/identity", this);
-        }
-
-        public class MyMiddleware
-        {
-            private readonly RequestDelegate _next;
-
-            public MyMiddleware(RequestDelegate next)
-            {
-                _next = next;
-            }
-
-            public async Task Invoke(HttpContext httpContext, ITestService svc)
-            {
-                httpContext.Response.StatusCode = 200;
-                await httpContext.Response.WriteAsync(svc.GetHelloValue());
-            }
-        }
-
-        public interface ITestService
-        {
-            string GetHelloValue();
-        }
-
-        class Test1TestService : ITestService
-        {
-            public string GetHelloValue()
-            {
-                return "Hello test 1";
-            }
-        }
-
-        class Test2TestService : ITestService
-        {
-            public string GetHelloValue()
-            {
-                return "Hello test 2";
-            }
         }
     }
 }

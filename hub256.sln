@@ -14,7 +14,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common", "Common", "{1D26B7
 		src\Common.props = src\Common.props
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Hub256.Common", "src\Hub256.Common\Hub256.Common.csproj", "{CEB7ED8F-658F-49AA-A0D9-52C743E54422}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Hub256.Common", "src\Common\Hub256.Common.csproj", "{CEB7ED8F-658F-49AA-A0D9-52C743E54422}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{D66E8F7A-4306-4728-9EBE-ACD26521CB29}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

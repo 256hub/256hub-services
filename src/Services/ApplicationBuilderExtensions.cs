@@ -23,21 +23,26 @@ namespace Microsoft.AspNetCore.Builder
             {
                 var services = new ServiceCollection();
                 startup.ConfigureServices(services, rootStartup.Configuration, rootStartup.Environment);
+                services.AddSingleton<WrappedHttpContextAccessor>();
+                services.AddSingleton<IHttpContextAccessor>(sp => sp.GetRequiredService<WrappedHttpContextAccessor>());
                 b.Populate(services, branchName);
             });
+
+            
 
             var serviceProvider = new AutofacServiceProvider(brScope);
             var scopeFactory = serviceProvider.GetRequiredService<IServiceScopeFactory>();
 
             app.Map(path, branch =>
             {
-                branch.ApplicationServices = serviceProvider;
+                var wrappedAccessor = serviceProvider.GetRequiredService<WrappedHttpContextAccessor>();
+                wrappedAccessor.Wrap(branch.ApplicationServices.GetRequiredService<IHttpContextAccessor>());
 
+                branch.ApplicationServices = serviceProvider;
                 branch.Use(async (ctx, next) =>
                 {
                     using (var scope = scopeFactory.CreateScope())
                     {
-
                         ctx.RequestServices = scope.ServiceProvider;
 
                         // Call the next delegate/middleware in the pipeline
@@ -48,6 +53,17 @@ namespace Microsoft.AspNetCore.Builder
             });
 
             return app;
+        }
+
+        class WrappedHttpContextAccessor : IHttpContextAccessor
+        {
+            IHttpContextAccessor _internalAccessor;
+            public HttpContext HttpContext { get => _internalAccessor.HttpContext; set => _internalAccessor.HttpContext = value; }
+
+            public void Wrap(IHttpContextAccessor contextAccessor)
+            {
+                _internalAccessor = contextAccessor;
+            }
         }
     }
 }
