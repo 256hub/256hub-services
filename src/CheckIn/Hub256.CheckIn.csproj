@@ -1,5 +1,7 @@
 ﻿<Project>
-  <Import Project="..\Common.props" /> 
+  <Import Project="..\Shared\Common.props" />
+  <Import Project="..\Shared\CommonStartup.props" />
+  
   <ItemGroup>
     <Folder Include="View\" />
   </ItemGroup> 

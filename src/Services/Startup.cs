@@ -41,6 +41,7 @@ namespace Hub256.Services
         {
             services.AddLogging();
             services.AddHttpContextAccessor();
+            services.ConfigureAppOptions(this.Configuration);
 
             var containerBuilder = new ContainerBuilder();
             containerBuilder.Populate(services);

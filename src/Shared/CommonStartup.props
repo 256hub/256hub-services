@@ -1,0 +1,7 @@
+<Project>
+  <Import Project="Swagger\Swagger.props" />
+  <ItemGroup>
+    <Compile Include="..\Shared\CommonStartup.cs" Link="CommonStartup.cs" />
+  </ItemGroup>
+  
+</Project>

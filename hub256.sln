@@ -9,9 +9,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Hub256.Services", "src\Serv
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Hub256.CheckIn", "src\CheckIn\Hub256.CheckIn.csproj", "{6D17A02C-6F86-465B-8F96-669A85509DC9}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common", "Common", "{1D26B77C-7B17-40A7-9C90-43E060AFB07E}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shared", "Shared", "{1D26B77C-7B17-40A7-9C90-43E060AFB07E}"
 	ProjectSection(SolutionItems) = preProject
-		src\Common.props = src\Common.props
+		src\Shared\Common.props = src\Shared\Common.props
+		src\Shared\CommonStartup.cs = src\Shared\CommonStartup.cs
+		src\Shared\CommonStartup.props = src\Shared\CommonStartup.props
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Hub256.Common", "src\Common\Hub256.Common.csproj", "{CEB7ED8F-658F-49AA-A0D9-52C743E54422}"
@@ -19,6 +21,15 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{D66E8F7A-4306-4728-9EBE-ACD26521CB29}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Swagger", "Swagger", "{2478E970-2C4A-4AB4-B4E0-E07B3082687B}"
+	ProjectSection(SolutionItems) = preProject
+		src\Shared\Swagger\ApiVersionParameter.cs = src\Shared\Swagger\ApiVersionParameter.cs
+		src\Shared\Swagger\SecurityRequirementsOperationFilter.cs = src\Shared\Swagger\SecurityRequirementsOperationFilter.cs
+		src\Shared\Swagger\Swagger.props = src\Shared\Swagger\Swagger.props
+		src\Shared\Swagger\SwaggerApplicationBuilderExtensions.cs = src\Shared\Swagger\SwaggerApplicationBuilderExtensions.cs
+		src\Shared\Swagger\SwaggerServiceCollectionExtensions.cs = src\Shared\Swagger\SwaggerServiceCollectionExtensions.cs
 	EndProjectSection
 EndProject
 Global
@@ -46,6 +57,9 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{2478E970-2C4A-4AB4-B4E0-E07B3082687B} = {1D26B77C-7B17-40A7-9C90-43E060AFB07E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {EEB3E6FD-08BC-4C17-B501-29EF39B20996}

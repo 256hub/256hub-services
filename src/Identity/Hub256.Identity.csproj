@@ -1,5 +1,5 @@
 ﻿<Project>
-  <Import Project="..\Common.props" />
+  <Import Project="..\Shared\Common.props" />
   <ItemGroup>
     <PackageReference Include="IdentityServer4" Version="2.2.0" />
     <PackageReference Include="IdentityServer4.EntityFramework" Version="2.1.1" />

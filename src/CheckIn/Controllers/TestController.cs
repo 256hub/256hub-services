@@ -26,6 +26,7 @@ namespace Hub256.CheckIn.Controllers
             });
         }
 
+        [HttpGet]
         public async Task<IActionResult> TestView()
         {
             return View();
