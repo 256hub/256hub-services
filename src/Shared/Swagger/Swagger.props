@@ -1,5 +1,6 @@
 <Project>
   <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning" Version="2.3.0" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning.ApiExplorer" Version="2.2.0" />
     <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="3.0.0" />
     <PackageReference Include="Microsoft.Extensions.PlatformAbstractions" Version="1.1.0" />
@@ -10,9 +11,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Include="..\Shared\Swagger\ApiVersionParameter.cs" Link="Swagger\ApiVersionParameter.cs" />
     <Compile Include="..\Shared\Swagger\SecurityRequirementsOperationFilter.cs" Link="Swagger\SecurityRequirementsOperationFilter.cs" />
     <Compile Include="..\Shared\Swagger\SwaggerApplicationBuilderExtensions.cs" Link="Swagger\SwaggerApplicationBuilderExtensions.cs" />
     <Compile Include="..\Shared\Swagger\SwaggerServiceCollectionExtensions.cs" Link="Swagger\SwaggerServiceCollectionExtensions.cs" />
+    <Compile Include="..\Shared\Swagger\SwaggerDefaultValues.cs" Link="Swagger\SwaggerDefaultValues.cs" />
   </ItemGroup>
 </Project> 

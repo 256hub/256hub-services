@@ -47,8 +47,8 @@ namespace Microsoft.Extensions.DependencyInjection
                 var info = new Info()
                 {
                     //Title = $"Loyalty Services API {description.ApiVersion}",
-                    Title = $"Loyalty Services API Version 1",
-                    Version = "v1",// description.ApiVersion.ToString(),
+                    Title = $"Loyalty Services API Version 1.0",
+                    Version = "1.0",// description.ApiVersion.ToString(),
                     Description = "The program virtual card type ",
                     Contact = new Contact() { Name = "256.foundation", Email = "dev@256.foundation" },
                     //TermsOfService = "MerSoft",
@@ -62,9 +62,29 @@ namespace Microsoft.Extensions.DependencyInjection
 
                 //c.SwaggerDoc(description.GroupName, info);
                 c.SwaggerDoc("v1", info);
+
+                info = new Info()
+                {
+                    //Title = $"Loyalty Services API {description.ApiVersion}",
+                    Title = $"Loyalty Services API Version 1.0",
+                    Version = "1.1",// description.ApiVersion.ToString(),
+                    Description = "The program virtual card type ",
+                    Contact = new Contact() { Name = "256.foundation", Email = "dev@256.foundation" },
+                    //TermsOfService = "MerSoft",
+                    License = new License() { Name = "MIT", Url = "https://opensource.org/licenses/MIT" }
+                };
+
+                //if (description.IsDeprecated)
+                //{
+                //    info.Description += " This API version has been deprecated.";
                 //}
-                c.OperationFilter<ApiVersionParameter>();
+
+                //c.SwaggerDoc(description.GroupName, info);
+                c.SwaggerDoc("v1.1", info);
+                //}
+                //c.OperationFilter<ApiVersionParameter>();
                 c.OperationFilter<SecurityRequirementsOperationFilter>();
+                c.OperationFilter<SwaggerDefaultValues>();
                 //c.OperationFilter<AddFileParamTypes>();
 
             });

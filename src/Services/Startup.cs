@@ -63,6 +63,17 @@ namespace Hub256.Services
            
             app.MapIsolated<CheckIn.Startup>("/checkin", this);
             app.MapIsolated<Identity.Startup>("/identity", this);
+
+            //TODO: fix authentication scopes and API version auto discovery.
+            app.UseSwaggerUI(c =>
+               {
+                   //foreach (var description in apiProvider.ApiVersionDescriptions)
+                   //{
+                   c.SwaggerEndpoint("/checkin/.well-known/api-docs/v1/swagger.json", "Checkin service API version 1");
+                   c.SwaggerEndpoint("/checkin/.well-known/api-docs/v1.1/swagger.json", "Checkin service API version 1.1");
+                   //}
+                   c.OAuthClientId("swaggerui");
+               });
         }
     }
 }

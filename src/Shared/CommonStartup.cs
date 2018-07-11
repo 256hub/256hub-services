@@ -19,11 +19,18 @@ namespace Hub256.Common
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public virtual void ConfigureServices(IServiceCollection services, IConfiguration configuration, IHostingEnvironment env)
         {
+
             var assembly = this.GetType().GetTypeInfo().Assembly;
             var part = new AssemblyPart(assembly);
 
+
             services.AddMvcCore()
-                .AddVersionedApiExplorer(o => o.GroupNameFormat = "'v'VVV")
+                .AddVersionedApiExplorer(o =>
+                {
+                    o.GroupNameFormat = "'v'VVV";
+                    o.DefaultApiVersion = new ApiVersion(1, 0);
+                    o.SubstituteApiVersionInUrl = true;
+                })
                 .SetCompatibilityVersion(CompatibilityVersion.Latest);
 
             services.AddMvc()
@@ -37,9 +44,15 @@ namespace Hub256.Common
                     });
                     options.SerializerSettings.Converters.Add(new JsonNullDateTimeConverter(options.SerializerSettings.DateFormatString, "0000"));
                 });
-            services.AddApiVersioning(o => o.ReportApiVersions = true);
 
             this.ConfigureSwaggerServices(services, configuration, env);
+
+            services.AddApiVersioning(o =>
+            {
+                o.ReportApiVersions = true;
+                o.AssumeDefaultVersionWhenUnspecified = true;
+                o.DefaultApiVersion = new ApiVersion(1, 0);
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -49,9 +62,12 @@ namespace Hub256.Common
             {
                 app.UseDeveloperExceptionPage();
             }
-            
+
             ConfigureSwagger(app, env);
             app.UseMvc();
+
+            var provider = app.ApplicationServices.GetRequiredService<Microsoft.AspNetCore.Mvc.ApiExplorer.IApiVersionDescriptionProvider>();
+
         }
 
         public virtual void ConfigureSwaggerServices(IServiceCollection services, IConfiguration configuration, IHostingEnvironment env)

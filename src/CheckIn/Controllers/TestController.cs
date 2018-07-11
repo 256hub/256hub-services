@@ -8,21 +8,52 @@ using System.Threading.Tasks;
 
 namespace Hub256.CheckIn.Controllers
 {
-    [Route("[controller]/[action]")]
+    [ApiController]
+    [ApiVersion("1.0")]
+    [Route("api/v{version:apiVersion}/[controller]/[action]")]
+    //[Route("[controller]/[action]")]
     public class TestController: Controller
     {
-
         /// <summary>
         /// Admin cancells poster order
         /// </summary>       
         [HttpGet]        
-        public async Task<IActionResult> TestMethod(int id, CancellationToken cancellation = default(CancellationToken))
+        public async Task<IActionResult> TestMethod(int id, CancellationToken cancellation = default)
         {            
             return Ok(new Person
             {
                 Age=id,
                 FirstName="Gago",
                 LastName="Dza"
+            });
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> TestView()
+        {
+            return View();
+        }
+
+
+    }
+
+    [ApiController]
+    [ApiVersion("1.1")]
+    [Route("api/v{version:apiVersion}/Test/[action]")]
+    //[Route("[controller]/[action]")]
+    public class Test11Controller : Controller
+    {
+        /// <summary>
+        /// Admin cancells poster order
+        /// </summary>       
+        [HttpGet]
+        public async Task<IActionResult> TestMethod(int id=7, CancellationToken cancellation = default)
+        {
+            return Ok(new Person
+            {
+                Age = id,
+                FirstName = "Gago 1.1",
+                LastName = "Dza1.1"
             });
         }
 
