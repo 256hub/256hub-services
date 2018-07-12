@@ -33,6 +33,8 @@ namespace Microsoft.AspNetCore.Builder
             var serviceProvider = new AutofacServiceProvider(brScope);
             var scopeFactory = serviceProvider.GetRequiredService<IServiceScopeFactory>();
 
+            startup.BranchServiceProvider = serviceProvider;
+
             app.Map(path, branch =>
             {
                 var wrappedAccessor = serviceProvider.GetRequiredService<WrappedHttpContextAccessor>();

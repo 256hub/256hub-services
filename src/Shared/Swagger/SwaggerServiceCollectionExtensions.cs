@@ -1,4 +1,5 @@
-﻿using Hub256.Swagger;
+﻿using Hub256.Common;
+using Hub256.Swagger;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -15,13 +16,13 @@ namespace Microsoft.Extensions.DependencyInjection
 {
     public static class SwaggerServiceCollectionExtensions
     {
-        public static IServiceCollection AddSwaggerDiscovery(this IServiceCollection services, IConfiguration configuration)
+        public static IServiceCollection AddSwaggerDiscovery(this IServiceCollection services, IConfiguration configuration, ICommonStartup commonStartup)
         {
             var identityUrl = configuration.GetEndpointOptions().IdentityUrl;
             services.AddSwaggerGen(c =>
             {
                 //TODO: Add correct scopes and service name
-                
+
                 var filePath = Path.Combine(PlatformServices.Default.Application.ApplicationBasePath, $"{typeof(SwaggerServiceCollectionExtensions).Assembly.GetName().Name}.xml");
                 c.IncludeXmlComments(filePath);
                 c.AddSecurityDefinition("oauth2", new OAuth2Scheme
@@ -40,48 +41,26 @@ namespace Microsoft.Extensions.DependencyInjection
                 c.DescribeAllEnumsAsStrings();
                 //TODO: resolve api version without building service provider
 
-                //var provider = services.BuildServiceProvider().GetRequiredService<IApiVersionDescriptionProvider>();
+                var provider = commonStartup.BranchServiceProvider.GetRequiredService<IApiVersionDescriptionProvider>();
 
-                //foreach (var description in provider.ApiVersionDescriptions)
-                //{
-                var info = new Info()
+                foreach (var description in provider.ApiVersionDescriptions)
                 {
-                    //Title = $"Loyalty Services API {description.ApiVersion}",
-                    Title = $"Loyalty Services API Version 1.0",
-                    Version = "1.0",// description.ApiVersion.ToString(),
-                    Description = "The program virtual card type ",
-                    Contact = new Contact() { Name = "256.foundation", Email = "dev@256.foundation" },
-                    //TermsOfService = "MerSoft",
-                    License = new License() { Name = "MIT", Url = "https://opensource.org/licenses/MIT" }
-                };
+                    var info = new Info()
+                    {
+                        Title = $"Loyalty Services API",
+                        Version = description.ApiVersion.ToString(),
+                        Description = "The program virtual card type ",
+                        Contact = new Contact() { Name = "256.foundation", Email = "dev@256.foundation" },
+                        //TermsOfService = "MerSoft",
+                        License = new License() { Name = "MIT", Url = "https://opensource.org/licenses/MIT" }
+                    };
 
-                //if (description.IsDeprecated)
-                //{
-                //    info.Description += " This API version has been deprecated.";
-                //}
-
-                //c.SwaggerDoc(description.GroupName, info);
-                c.SwaggerDoc("v1", info);
-
-                info = new Info()
-                {
-                    //Title = $"Loyalty Services API {description.ApiVersion}",
-                    Title = $"Loyalty Services API Version 1.0",
-                    Version = "1.1",// description.ApiVersion.ToString(),
-                    Description = "The program virtual card type ",
-                    Contact = new Contact() { Name = "256.foundation", Email = "dev@256.foundation" },
-                    //TermsOfService = "MerSoft",
-                    License = new License() { Name = "MIT", Url = "https://opensource.org/licenses/MIT" }
-                };
-
-                //if (description.IsDeprecated)
-                //{
-                //    info.Description += " This API version has been deprecated.";
-                //}
-
-                //c.SwaggerDoc(description.GroupName, info);
-                c.SwaggerDoc("v1.1", info);
-                //}
+                    if (description.IsDeprecated)
+                    {
+                        info.Description += " This API version has been deprecated.";
+                    }
+                    c.SwaggerDoc(description.GroupName, info);
+                }
                 //c.OperationFilter<ApiVersionParameter>();
                 c.OperationFilter<SecurityRequirementsOperationFilter>();
                 c.OperationFilter<SwaggerDefaultValues>();

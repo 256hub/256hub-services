@@ -15,14 +15,14 @@ namespace Hub256.Common
 {
     public class CommonStartup : ICommonStartup
     {
+        public IServiceProvider BranchServiceProvider { get; set; }
+
         // This method gets called by the runtime. Use this method to add services to the container.
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public virtual void ConfigureServices(IServiceCollection services, IConfiguration configuration, IHostingEnvironment env)
         {
-
             var assembly = this.GetType().GetTypeInfo().Assembly;
             var part = new AssemblyPart(assembly);
-
 
             services.AddMvcCore()
                 .AddVersionedApiExplorer(o =>
@@ -53,6 +53,8 @@ namespace Hub256.Common
                 o.AssumeDefaultVersionWhenUnspecified = true;
                 o.DefaultApiVersion = new ApiVersion(1, 0);
             });
+
+           
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -65,15 +67,11 @@ namespace Hub256.Common
 
             ConfigureSwagger(app, env);
             app.UseMvc();
-
-            var provider = app.ApplicationServices.GetRequiredService<Microsoft.AspNetCore.Mvc.ApiExplorer.IApiVersionDescriptionProvider>();
-
         }
 
         public virtual void ConfigureSwaggerServices(IServiceCollection services, IConfiguration configuration, IHostingEnvironment env)
         {
-            services.AddSwaggerDiscovery(configuration);
-            
+            services.AddSwaggerDiscovery(configuration, this);
         }
 
         public virtual void ConfigureSwagger(IApplicationBuilder app, IHostingEnvironment env)

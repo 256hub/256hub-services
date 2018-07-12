@@ -9,6 +9,7 @@ namespace Hub256.Common
 {
     public interface ICommonStartup
     {       
+        IServiceProvider BranchServiceProvider { get; set; }
         void ConfigureServices(IServiceCollection services, IConfiguration configuration, IHostingEnvironment env);
         void Configure(IApplicationBuilder app, IHostingEnvironment env);
     }
