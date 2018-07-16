@@ -15,7 +15,7 @@ namespace Microsoft.AspNetCore.Builder
 {
     public static class ApplicationBuilderExtensions
     {
-        public static IApplicationBuilder MapIsolated<TStartup>(this IApplicationBuilder app, PathString path, Startup rootStartup) where TStartup: Hub256.Common.ICommonStartup, new()
+        public static TStartup MapIsolated<TStartup>(this IApplicationBuilder app, PathString path, Startup rootStartup) where TStartup: Hub256.Common.ICommonStartup, new()
         {
             var startup = new TStartup();
             var branchName = path.ToString();
@@ -27,8 +27,6 @@ namespace Microsoft.AspNetCore.Builder
                 services.AddSingleton<IHttpContextAccessor>(sp => sp.GetRequiredService<WrappedHttpContextAccessor>());
                 b.Populate(services, branchName);
             });
-
-            
 
             var serviceProvider = new AutofacServiceProvider(brScope);
             var scopeFactory = serviceProvider.GetRequiredService<IServiceScopeFactory>();
@@ -54,7 +52,8 @@ namespace Microsoft.AspNetCore.Builder
                 startup.Configure(branch, rootStartup.Environment);
             });
 
-            return app;
+            rootStartup.KnownServices.Add(path, startup.ServiceInfo);
+            return startup;
         }
 
         class WrappedHttpContextAccessor : IHttpContextAccessor

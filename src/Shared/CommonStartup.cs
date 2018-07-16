@@ -13,9 +13,11 @@ using Newtonsoft.Json.Converters;
 
 namespace Hub256.Common
 {
-    public class CommonStartup : ICommonStartup
+    public abstract class CommonStartup : ICommonStartup
     {
         public IServiceProvider BranchServiceProvider { get; set; }
+
+        public abstract ServiceInfo ServiceInfo { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
@@ -23,6 +25,8 @@ namespace Hub256.Common
         {
             var assembly = this.GetType().GetTypeInfo().Assembly;
             var part = new AssemblyPart(assembly);
+
+            services.AddSingleton(ServiceInfo);
 
             services.AddMvcCore()
                 .AddVersionedApiExplorer(o =>

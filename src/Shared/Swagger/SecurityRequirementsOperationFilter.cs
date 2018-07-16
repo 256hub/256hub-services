@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Hub256.Common;
+using Microsoft.AspNetCore.Authorization;
 using Swashbuckle.AspNetCore.Swagger;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System;
@@ -10,7 +11,12 @@ namespace Hub256.Swagger
 {
     public class SecurityRequirementsOperationFilter : IOperationFilter
     {
-        //TODO: inject scopes data
+        readonly ServiceInfo _serviceInfo;
+
+        public SecurityRequirementsOperationFilter(ServiceInfo serviceInfo)
+        {
+            _serviceInfo = serviceInfo;
+        }
         public void Apply(Operation operation, OperationFilterContext context)
         {
             // Policy names map to scopes
@@ -27,7 +33,7 @@ namespace Hub256.Swagger
                 {
                     new Dictionary<string, IEnumerable<string>>
                     {
-                        { "oauth2", new[] {"loyaltyservices" } }
+                        { "oauth2", new[] { _serviceInfo.ServiceName } }
                     }
                 };
             }

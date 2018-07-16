@@ -15,7 +15,15 @@ namespace Hub256.CheckIn
 {
     public class Startup : CommonStartup
     {
+        readonly ServiceInfo _serviceInfo;
+        public override ServiceInfo ServiceInfo => _serviceInfo;
 
+        public Startup()
+        {
+            _serviceInfo = new ServiceInfo("checkin", "Checkin service",
+                "Checkin service is used to provide 256 hub members authentication and checkin process into hub");
 
+            _serviceInfo.RequiredScopes.Add(("checkin", "Checkin api scope"));
+        }       
     }
 }

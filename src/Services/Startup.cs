@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
+using Hub256.Common;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -15,6 +16,7 @@ namespace Hub256.Services
 {
     public class Startup
     {
+        Dictionary<string, ServiceInfo> _knownServices;
 
         public Startup(IConfiguration configuration, IHostingEnvironment env)
         {
@@ -34,6 +36,8 @@ namespace Hub256.Services
 
         public ILoggerFactory LoggerFactory { get; }
         public IContainer RootContainer { get; private set; }
+
+        public Dictionary<string, ServiceInfo> KnownServices => _knownServices = _knownServices ?? new Dictionary<string, ServiceInfo>();
 
         // This method gets called by the runtime. Use this method to add services to the container.
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
@@ -61,17 +65,20 @@ namespace Hub256.Services
                 loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             }          
            
-            app.MapIsolated<CheckIn.Startup>("/checkin", this);
-            app.MapIsolated<Identity.Startup>("/identity", this);
 
-            //TODO: fix authentication scopes and API version auto discovery.
+            app.MapIsolated<Identity.Startup>("/identity", this);
+            app.MapIsolated<CheckIn.Startup>("/checkin", this);
+
             app.UseSwaggerUI(c =>
                {
-                   //foreach (var description in apiProvider.ApiVersionDescriptions)
-                   //{
-                   c.SwaggerEndpoint("/checkin/.well-known/api-docs/v1/swagger.json", "Checkin service API version 1");
-                   c.SwaggerEndpoint("/checkin/.well-known/api-docs/v1.1/swagger.json", "Checkin service API version 1.1");
-                   //}
+                   foreach (var service in this.KnownServices)
+                   {
+                       if (!service.Value.UsesSwagger)
+                           continue;
+
+                       foreach (var apiVersion in service.Value.ApiVersions)
+                           c.SwaggerEndpoint($"{service.Key}/.well-known/api-docs/{apiVersion}/swagger.json", $"{service.Value.ServiceDisplayName} version {apiVersion}");                     
+                   }
                    c.OAuthClientId("swaggerui");
                });
         }
