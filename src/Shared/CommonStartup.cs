@@ -19,14 +19,12 @@ namespace Hub256.Common
 
         public abstract ServiceInfo ServiceInfo { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
-        // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public virtual void ConfigureServices(IServiceCollection services, IConfiguration configuration, IHostingEnvironment env)
         {
             var assembly = this.GetType().GetTypeInfo().Assembly;
             var part = new AssemblyPart(assembly);
 
-            services.AddSingleton(ServiceInfo);
+            services.AddSingleton(this.ServiceInfo);
 
             services.AddMvcCore()
                 .AddVersionedApiExplorer(o =>
@@ -37,7 +35,11 @@ namespace Hub256.Common
                 })
                 .SetCompatibilityVersion(CompatibilityVersion.Latest);
 
-            services.AddMvc()
+            services.AddMvc(o=>
+                {
+                    if (this.ServiceInfo.UsesAuthentication
+                    o.AddAuthorizationOptions();
+                })
                 .ConfigureApplicationPartManager(apm => apm.ApplicationParts.Add(part))
                 .AddJsonOptions(options =>
                 {
@@ -49,7 +51,15 @@ namespace Hub256.Common
                     options.SerializerSettings.Converters.Add(new JsonNullDateTimeConverter(options.SerializerSettings.DateFormatString, "0000"));
                 });
 
-            this.ConfigureSwaggerServices(services, configuration, env);
+            if (this.ServiceInfo.UsesSwagger)
+            {
+                this.ConfigureSwaggerServices(services, configuration, env);
+            }
+
+            if (this.ServiceInfo.UsesAuthentication)
+            {
+                ConfigureAuthorizationServices(services, configuration, env);
+            }
 
             services.AddApiVersioning(o =>
             {
@@ -57,19 +67,19 @@ namespace Hub256.Common
                 o.AssumeDefaultVersionWhenUnspecified = true;
                 o.DefaultApiVersion = new ApiVersion(1, 0);
             });
-
-           
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public virtual void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
-
-            ConfigureSwagger(app, env);
+            if (this.ServiceInfo.UsesSwagger)
+            {
+                ConfigureSwagger(app, env);
+            }
+            
             app.UseMvc();
         }
 
@@ -81,6 +91,15 @@ namespace Hub256.Common
         public virtual void ConfigureSwagger(IApplicationBuilder app, IHostingEnvironment env)
         {
             app.UseSwaggerDiscovery();
-        }       
+        }
+
+        public virtual void ConfigureAuthorizationServices(IServiceCollection services, IConfiguration configuration, IHostingEnvironment env)
+        {
+            services.ConfigureAuthorization(configuration, this.ServiceInfo);
+        }
+
+        public virtual void ConfigureAuthorization(IApplicationBuilder app, IHostingEnvironment env)
+        {
+        }
     }
 }

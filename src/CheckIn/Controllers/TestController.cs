@@ -9,9 +9,7 @@ using System.Threading.Tasks;
 namespace Hub256.CheckIn.Controllers
 {
     [ApiController]
-    [ApiVersion("1.0")]
     [Route("api/v{version:apiVersion}/[controller]/[action]")]
-    //[Route("[controller]/[action]")]
     public class TestController: Controller
     {
         /// <summary>

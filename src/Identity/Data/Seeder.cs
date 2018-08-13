@@ -39,10 +39,13 @@ namespace Hub256.Identity.Data
         {
             _logger.LogInformation("Seeding database...");
 
-            if (!await _configurationDb.Clients.AnyAsync())
+            var seededClientsIds = await _configurationDb.Clients.Select(x => x.ClientId).ToArrayAsync();
+            var notSeededClients = Seed.Clients.Where(x => !seededClientsIds.Contains(x.ClientId)).ToList();
+
+            if (notSeededClients.Any())
             {
-                _logger.LogInformation("Clients being populated");
-                foreach (var client in Seed.Clients.Select(x=>x.ToEntity()))
+                _logger.LogInformation("Not seeded clients being populated");
+                foreach (var client in notSeededClients.Select(x => x.ToEntity()))
                 {
                     _configurationDb.Clients.Add(client);
                 }
@@ -52,11 +55,14 @@ namespace Hub256.Identity.Data
             {
                 _logger.LogInformation("Clients already populated");
             }
+            
+            var seededIdResources = await _configurationDb.IdentityResources.Select(x => x.Name).ToArrayAsync();
+            var notSeededIdResources = Seed.IdentityResources.Where(x => !seededIdResources.Contains(x.Name)).ToList();
 
-            if (!await _configurationDb.IdentityResources.AnyAsync())
+            if (seededIdResources.Any())
             {
-                _logger.LogInformation("IdentityResources being populated");
-                foreach (var resource in Seed.IdentityResources.Select(x=>x.ToEntity()))
+                _logger.LogInformation("Not seeded identityResources being populated");
+                foreach (var resource in notSeededIdResources.Select(x => x.ToEntity()))
                 {
                     _configurationDb.IdentityResources.Add(resource);
                 }
@@ -64,13 +70,16 @@ namespace Hub256.Identity.Data
             }
             else
             {
-                _logger.LogInformation("IdentityResources already populated");
+                _logger.LogInformation("IdentityResources already populated.");
             }
 
-            if (!await _configurationDb.ApiResources.AnyAsync())
+            var seededApiResources = await _configurationDb.ApiResources.Select(x => x.Name).ToArrayAsync();
+            var notSeededApiResources = Seed.ApiResources.Where(x => !seededApiResources.Contains(x.Name)).ToList();
+
+            if (notSeededApiResources.Any())
             {
-                _logger.LogInformation("ApiResources being populated");
-                foreach (var resource in Seed.ApiResources.Select(x=>x.ToEntity()))
+                _logger.LogInformation("Not seeded apiResources being populated.");
+                foreach (var resource in notSeededApiResources.Select(x => x.ToEntity()))
                 {
                     _configurationDb.ApiResources.Add(resource);
                 }

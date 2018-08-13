@@ -2,6 +2,10 @@
   <Import Project="Swagger\Swagger.props" />
   <ItemGroup>
     <Compile Include="..\Shared\CommonStartup.cs" Link="CommonStartup.cs" />
+
+    <Compile Include="..\Shared\Authorization\AuthorizationServiceCollectionExtensions.cs" Link="Authorization\AuthorizationServiceCollectionExtensions.cs" />
+    <Compile Include="..\Shared\Authorization\MvcOptionsExtensions.cs" Link="Authorization\MvcOptionsExtensions.cs" />
   </ItemGroup>
+
   
 </Project>

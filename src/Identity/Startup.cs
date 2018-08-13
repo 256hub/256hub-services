@@ -23,13 +23,12 @@ namespace Hub256.Identity
 
         public ServiceInfo ServiceInfo => _info = _info ?? new ServiceInfo("identity", "Identity service", usesAuthentication: false, usesSwagger: false);
 
-        // This method gets called by the runtime. Use this method to add services to the container.
-        // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
+        
         public void ConfigureServices(IServiceCollection services, IConfiguration configuration, IHostingEnvironment env)
         {
             var currentAssembly = typeof(Startup).GetTypeInfo().Assembly.GetName().Name;
 
-            var connectionString = configuration.GetConnectionString("MainConnection");// @"Data Source=(LocalDb)\MSSQLLocalDB;database=Hub256Identity;trusted_connection=yes;";
+            var connectionString = configuration.GetConnectionString("MainConnection")??@"Data Source=(LocalDb)\MSSQLLocalDB;database=Hub256Identity;trusted_connection=yes;";
             services.AddIdentityServer()
                 .AddConfigurationStore<IdentityConfigurationDbContext>(o =>
                    {

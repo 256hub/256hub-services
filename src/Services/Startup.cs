@@ -47,6 +47,16 @@ namespace Hub256.Services
             services.AddHttpContextAccessor();
             services.ConfigureAppOptions(this.Configuration);
 
+            services.AddCors(options =>
+            {
+                options.AddPolicy("AllowAnyOrigin",
+                    builder => builder.AllowAnyOrigin()
+                                        .AllowAnyHeader()
+                                        .AllowAnyMethod()
+                                        .AllowCredentials()
+                    );
+            });
+
             var containerBuilder = new ContainerBuilder();
             containerBuilder.Populate(services);
             RootContainer = containerBuilder.Build();
@@ -63,14 +73,18 @@ namespace Hub256.Services
                 app.UseDeveloperExceptionPage();
                 loggerFactory.AddDebug();
                 loggerFactory.AddConsole(Configuration.GetSection("Logging"));
-            }          
-           
+            }
+
+            app.UseCors("AllowAnyOrigin");
 
             app.MapIsolated<Identity.Startup>("/identity", this);
             app.MapIsolated<CheckIn.Startup>("/checkin", this);
 
+            //app.UseStaticFiles();
+
             app.UseSwaggerUI(c =>
-               {
+               {                   
+                   //c.IndexStream
                    foreach (var service in this.KnownServices)
                    {
                        if (!service.Value.UsesSwagger)
@@ -80,6 +94,7 @@ namespace Hub256.Services
                            c.SwaggerEndpoint($"{service.Key}/.well-known/api-docs/{apiVersion}/swagger.json", $"{service.Value.ServiceDisplayName} version {apiVersion}");                     
                    }
                    c.OAuthClientId("swaggerui");
+                   c.OAuthClientSecret("swaggeruisecret");
                });
         }
     }

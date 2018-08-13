@@ -28,7 +28,7 @@ namespace Microsoft.Extensions.DependencyInjection
                     c.AddSecurityDefinition("oauth2", new OAuth2Scheme
                     {
                         Type = "oauth2",
-                        Flow = "implicit",
+                        Flow = "password",
                         AuthorizationUrl = $"{identityUrl}/connect/authorize",
                         TokenUrl = $"{identityUrl}/connect/token",
                         Scopes = new Dictionary<string, string>(serviceInfo.RequiredScopes.Select(x => new KeyValuePair<string, string>(x.Scope, x.DisplayName))),                                            
@@ -46,7 +46,6 @@ namespace Microsoft.Extensions.DependencyInjection
                         Version = description.ApiVersion.ToString(),
                         Description = serviceInfo.ServiceDescription,
                         Contact = new Contact() { Name = "256.foundation", Email = "dev@256.foundation" },
-                        //TermsOfService = "MerSoft",
                         License = new License() { Name = "MIT", Url = "https://opensource.org/licenses/MIT" }
                     };
 
@@ -55,7 +54,7 @@ namespace Microsoft.Extensions.DependencyInjection
                         info.Description += " This API version has been deprecated.";
                     }
                     c.SwaggerDoc(description.GroupName, info);
-                    startup.ServiceInfo.ApiVersions.Add(description.GroupName);
+                    serviceInfo.ApiVersions.Add(description.GroupName);
                 }
                 //c.OperationFilter<ApiVersionParameter>();
                 c.OperationFilter<SecurityRequirementsOperationFilter>();

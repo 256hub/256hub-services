@@ -6,10 +6,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="wwwroot\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Autofac" Version="4.8.1" />
     <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="4.2.2" />
     <PackageReference Include="Microsoft.AspNetCore.App" />
@@ -20,6 +16,10 @@
     <ProjectReference Include="..\CheckIn\Hub256.CheckIn.csproj" />
     <ProjectReference Include="..\Common\Hub256.Common.csproj" />
     <ProjectReference Include="..\Identity\Hub256.Identity.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="wwwroot\" />
   </ItemGroup>
 
 </Project>
